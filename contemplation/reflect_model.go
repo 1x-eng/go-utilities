@@ -6,10 +6,10 @@ import (
 
 
 type DTOReflection struct {
-	FieldName       interface{{}}
-	FieldType       interface{{}}
-	FieldValue      interface{{}}
-	TagFieldName    interface{{}} 
+	FieldName       interface{}
+	FieldType       interface{}
+	FieldValue      interface{}
+	TagFieldName    interface{} 
 }
 
 type StructToReflect[T any] struct {
