@@ -4,24 +4,24 @@ import (
 	"reflect"
 )
 
-type DTOReflection struct {
+type StructToReflect struct {
+	AModel  interface{}
+	TagName string
+}
+
+type reflectedModel struct {
 	FieldName    string
 	FieldType    interface{}
 	FieldValue   interface{}
 	TagFieldName string
 }
 
-type StructToReflect struct {
-	AModel  interface{}
-	TagName string
-}
-
-func ReflectStructFieldsByTag(model StructToReflect) ([]DTOReflection, error) {
+func ReflectStructFieldsByTag(model StructToReflect) ([]reflectedModel, error) {
 
 	valueOfProperty := reflect.ValueOf(model.AModel)
 	typeOfProperty := valueOfProperty.Type()
 
-	reflectedStruct := []DTOReflection{}
+	reflectedStruct := []reflectedModel{}
 
 	for i := 0; i < valueOfProperty.NumField(); i++ {
 		reflectedStructField, ok := reflect.TypeOf(model.AModel).FieldByName(typeOfProperty.Field(i).Name)
@@ -30,7 +30,7 @@ func ReflectStructFieldsByTag(model StructToReflect) ([]DTOReflection, error) {
 			panic("Unable to reflect. Field not found")
 		}
 
-		reflectedStruct = append(reflectedStruct, DTOReflection{
+		reflectedStruct = append(reflectedStruct, reflectedModel{
 			FieldName:    typeOfProperty.Field(i).Name,
 			FieldType:    typeOfProperty.Field(i).Type,
 			FieldValue:   valueOfProperty.Field(i).Interface(),
