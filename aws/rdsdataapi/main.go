@@ -1,4 +1,4 @@
-package rds_data_api
+package rdsdataapi
 
 func Heartbeat() string {
 	return "Alive"
