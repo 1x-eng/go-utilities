@@ -15,6 +15,11 @@ type AuroraRDSConfig struct {
 	RdsDataServiceClient *rdsdataservice.RDSDataService
 }
 
+type ExecuteSQLResponse struct {
+    GeneratedFields        []string,
+    NumberOfRecorcdUpdated  int
+}
+
 func getNewSession(awsRegion *string) (*session.Session, error) {
 	session, err := session.NewSession(&aws.Config{
 		Region: aws.String(*awsRegion),
@@ -46,7 +51,7 @@ func GetNewClient(awsRegion *string) *rdsdataservice.RDSDataService {
 	return rdsDataServiceClient
 }
 
-func ExecuteSQL(rdsConfig *AuroraRDSConfig, sql *string) {
+func ExecuteSQL(rdsConfig *AuroraRDSConfig, sql *string) *ExecuteSQLResponse {
 	req, resp := rdsConfig.RdsDataServiceClient.ExecuteStatementRequest(&rdsdataservice.ExecuteStatementInput{
 		Database:    aws.String(*rdsConfig.Database),
 		ResourceArn: aws.String(*rdsConfig.ResourceArn),
@@ -54,14 +59,18 @@ func ExecuteSQL(rdsConfig *AuroraRDSConfig, sql *string) {
 		Sql:         aws.String(*sql),
 	})
 
-	fmt.Println(req, resp)
+	err := req.Send()
 
-	err1 := req.Send()
-	if err1 == nil { // resp is now filled
-		fmt.Println("Response:", resp)
-	} else {
-		fmt.Println("error:", err1)
+	if err != nil {
+		panic(err)
 	}
+
+	fmt.Println("Response after executing sql = ", resp)
+    
+    return &ExecuteSQLResponse{
+        GeneratedFields: resp.GeneratedFields,
+        NumberOfRecorcdUpdated: resp.NumberOfRecorcdUpdated
+    }
 }
 
 func Heartbeat() string {
