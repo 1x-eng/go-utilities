@@ -54,6 +54,8 @@ func ExecuteSQL(rdsConfig *AuroraRDSConfig, sql *string) {
 		Sql:         aws.String(*sql),
 	})
 
+	fmt.Println(req, resp)
+
 	err1 := req.Send()
 	if err1 == nil { // resp is now filled
 		fmt.Println("Response:", resp)
