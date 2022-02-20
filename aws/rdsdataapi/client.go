@@ -8,7 +8,7 @@ import (
 )
 
 type AuroraRDSConfig struct {
-    AwsRegion            *string
+	AwsRegion            *string
 	Database             *string
 	ResourceArn          *string
 	SecretArn            *string
@@ -27,16 +27,16 @@ func getNewSession(awsRegion *string) (*session.Session, error) {
 	return session, nil
 }
 
-func GenerateAuroraRDSConfig(awsRegion *string, dbName: *string, dbResourceArn: *string, dbSecretArn: *string) *AuroraRDSConfig {
-    rdsConfig := AuroraRDSConfig{
-        awsRegion: awsRegion,
-        database: dbName,
-        resourceArn: dbResourceArn,
-        dbSecretArn: dbSecretArn,
-        rdsDataServiceClient: GetNewClient(awsRegion)
-    }
+func GenerateAuroraRDSConfig(awsRegion *string, dbName *string, dbResourceArn *string, dbSecretArn *string) *AuroraRDSConfig {
+	rdsConfig := AuroraRDSConfig{
+		AwsRegion:            awsRegion,
+		Database:             dbName,
+		ResourceArn:          dbResourceArn,
+		SecretArn:            dbSecretArn,
+		RdsDataServiceClient: GetNewClient(awsRegion),
+	}
 
-    return &rdsConfig
+	return &rdsConfig
 }
 
 func GetNewClient(awsRegion *string) *rdsdataservice.RDSDataService {
@@ -47,10 +47,10 @@ func GetNewClient(awsRegion *string) *rdsdataservice.RDSDataService {
 }
 
 func ExecuteSQL(rdsConfig *AuroraRDSConfig, sql *string) {
-	req, resp := rdsConfig.rdsDataServiceClient.ExecuteStatementRequest(&rdsdataservice.ExecuteStatementInput{
-		Database:    aws.String(*rdsConfig.database),
-		ResourceArn: aws.String(*rdsConfig.resourceArn),
-		SecretArn:   aws.String(*rdsConfig.secretArn),
+	req, resp := rdsConfig.RdsDataServiceClient.ExecuteStatementRequest(&rdsdataservice.ExecuteStatementInput{
+		Database:    aws.String(*rdsConfig.Database),
+		ResourceArn: aws.String(*rdsConfig.ResourceArn),
+		SecretArn:   aws.String(*rdsConfig.SecretArn),
 		Sql:         aws.String(*sql),
 	})
 
