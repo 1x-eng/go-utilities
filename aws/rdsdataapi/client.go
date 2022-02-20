@@ -8,10 +8,11 @@ import (
 )
 
 type AuroraRDSConfig struct {
-	database             *string
-	resourceArn          *string
-	secretArn            *string
-	rdsDataServiceClient *rdsdataservice.RDSDataService
+    AwsRegion            *string
+	Database             *string
+	ResourceArn          *string
+	SecretArn            *string
+	RdsDataServiceClient *rdsdataservice.RDSDataService
 }
 
 func getNewSession(awsRegion *string) (*session.Session, error) {
@@ -24,6 +25,18 @@ func getNewSession(awsRegion *string) (*session.Session, error) {
 	}
 
 	return session, nil
+}
+
+func GenerateAuroraRDSConfig(awsRegion *string, dbName: *string, dbResourceArn: *string, dbSecretArn: *string) *AuroraRDSConfig {
+    rdsConfig := AuroraRDSConfig{
+        awsRegion: awsRegion,
+        database: dbName,
+        resourceArn: dbResourceArn,
+        dbSecretArn: dbSecretArn,
+        rdsDataServiceClient: GetNewClient(awsRegion)
+    }
+
+    return &rdsConfig
 }
 
 func GetNewClient(awsRegion *string) *rdsdataservice.RDSDataService {
