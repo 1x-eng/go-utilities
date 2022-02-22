@@ -2,6 +2,7 @@ package rdsdataapi
 
 import (
 	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/rdsdataservice"
@@ -16,8 +17,7 @@ type AuroraRDSConfig struct {
 }
 
 type ExecuteSQLResponse struct {
-    GeneratedFields        []string
-    NumberOfRecorcdUpdated  int
+	GeneratedFields []*rdsdataservice.Field
 }
 
 func getNewSession(awsRegion *string) (*session.Session, error) {
@@ -66,11 +66,10 @@ func ExecuteSQL(rdsConfig *AuroraRDSConfig, sql *string) *ExecuteSQLResponse {
 	}
 
 	fmt.Println("Response after executing sql = ", resp)
-    
-    return &ExecuteSQLResponse{
-        GeneratedFields: resp.GeneratedFields,
-        NumberOfRecorcdUpdated: resp.NumberOfRecorcdUpdated
-    }
+
+	return &ExecuteSQLResponse{
+		GeneratedFields: resp.GeneratedFields,
+	}
 }
 
 func Heartbeat() string {
