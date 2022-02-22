@@ -16,7 +16,7 @@ type AuroraRDSConfig struct {
 }
 
 type ExecuteSQLResponse struct {
-    GeneratedFields        []string,
+    GeneratedFields        []string
     NumberOfRecorcdUpdated  int
 }
 
