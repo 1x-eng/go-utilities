@@ -1,6 +1,6 @@
 module github.com/1x-eng/go-utilities/aws/rdsdataapi
 
-go 1.17
+go 1.19
 
 require github.com/aws/aws-sdk-go v1.44.1
 
